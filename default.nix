@@ -9,7 +9,7 @@ nimPackages.buildNimPackage {
   src = ./.;
 
   nimBinOnly = false;
-  nimbleFile = ./norg-ls.nimble;
+  nimbleFile = ./norgls.nimble;
   inherit nimRelease;
   nimFlags = ["--threads:on"];
 
