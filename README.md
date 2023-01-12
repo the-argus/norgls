@@ -1,2 +1,3 @@
-# norg-ls
-an LSP implementation for neorgs .nord markdown-like filetype
+# norgls
+
+a LSP implementation for neorgs .norg markdown-like filetype
