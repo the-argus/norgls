@@ -5,3 +5,6 @@ htmldocs/
 result
 
 .direnv
+
+# this is used for testing (neovim picks it up as the root directory)
+index.norg
