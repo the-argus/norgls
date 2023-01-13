@@ -5,7 +5,7 @@ import asynctools/asyncproc
 include lsp/messages
 
 type
-  LogLevel {.pure.} = enum
+  LogLevel = enum
     debug, warn, error
 
 proc log(level: LogLevel, args: varargs[string, `$`]) =
@@ -24,23 +24,23 @@ template whenValid(data, kind, body) =
     var data = kind(data)
     body
   else:
-    debug.log("Unable to parse data as ", kind)
+    log(LogLevel.debug, "Unable to parse data as ", kind)
 
 proc main(ins: Stream | AsyncFile, outs: Stream | AsyncFile) {.async.}=
   while true:
     try:
-      let frame = await ins.readLine
-      let message = frame.parseJson
+      let frame = await ins.readLine()
+      let message = frame.parseJson()
       whenValid(message, RequestMessage):
         echo("recieved valid LSP request")
     except UriParseError as e:
-      warn.log("Got exception parsing URI: ", e.msg)
+      log(LogLevel.warn, "Got exception parsing URI: ", e.msg)
       continue
     except IOError as e:
-      error.log("Got IOError: ", e.msg)
+      log(LogLevel.error, "Got IOError: ", e.msg)
       break
     except CatchableError as e:
-      warn.log("Got exception: ", e.msg)
+      log(LogLevel.warn, "Got exception: ", e.msg)
       continue
 
 var
