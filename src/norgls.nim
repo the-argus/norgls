@@ -29,7 +29,12 @@ template whenValid(data, kind, body) =
 proc main(ins: Stream | AsyncFile, outs: Stream | AsyncFile) {.async.}=
   while true:
     try:
-      let frame = await ins.readLine()
+      # read stdin asynchronously
+      let frame = await ins.readAll()
+      if frame == "":
+        continue
+      
+      # parse as json
       let message = frame.parseJson()
       whenValid(message, RequestMessage):
         echo("recieved valid LSP request")
