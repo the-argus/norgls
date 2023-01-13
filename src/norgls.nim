@@ -34,13 +34,13 @@ proc main(ins: Stream | AsyncFile, outs: Stream | AsyncFile) {.async.}=
       whenValid(message, RequestMessage):
         echo("recieved valid LSP request")
     except UriParseError as e:
-      LogLevel.warn.log("Got exception parsing URI: ", e.msg)
+      warn.log("Got exception parsing URI: ", e.msg)
       continue
     except IOError as e:
-      LogLevel.error.log("Got IOError: ", e.msg)
+      error.log("Got IOError: ", e.msg)
       break
     except CatchableError as e:
-      LogLevel.warn.log("Got exception: ", e.msg)
+      warn.log("Got exception: ", e.msg)
       continue
 
 var
