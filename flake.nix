@@ -14,8 +14,11 @@
     pkgs = genSystems (system: import nixpkgs {inherit system;});
   in {
     packages = genSystems (system: rec {
-      norg-ls = pkgs.${system}.callPackage ./. {};
-      default = norg-ls;
+      norgls = pkgs.${system}.callPackage ./. {};
+      tests = {
+        neovim = pkgs.${system}.callPackage ./tests/neovim {inherit norgls;};
+      };
+      default = norgls;
     });
 
     formatter = genSystems (system: pkgs.${system}.alejandra);

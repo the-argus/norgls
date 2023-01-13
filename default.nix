@@ -4,7 +4,7 @@
   ...
 }:
 nimPackages.buildNimPackage {
-  pname = "norg-ls";
+  pname = "norgls";
   version = "0.0.1";
   src = ./.;
 
