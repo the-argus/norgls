@@ -1,8 +1,13 @@
 import json
+import os
+import lsp_implementation
 import std/[asyncdispatch, asyncfile, streams, uri]
 import asynctools/asyncproc
 
 include lsp/messages
+
+# milliseconds between iterations of the main while loop.
+const RESPONSE_MS = 100
 
 type
   LogLevel = enum
@@ -32,12 +37,14 @@ proc main(ins: Stream | AsyncFile, outs: Stream | AsyncFile) {.async.}=
       # read stdin asynchronously
       let frame = await ins.readAll()
       if frame == "":
+        os.sleep(RESPONSE_MS)
         continue
       
       # parse as json
       let message = frame.parseJson()
       whenValid(message, RequestMessage):
         echo("recieved valid LSP request")
+        outs.write(processRequest(message))
     except UriParseError as e:
       log(LogLevel.warn, "Got exception parsing URI: ", e.msg)
       continue
