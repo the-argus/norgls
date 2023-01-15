@@ -1,4 +1,3 @@
-import json
 include lsp/messages
 
 proc processRequest*(message: RequestMessage): Diagnostic =

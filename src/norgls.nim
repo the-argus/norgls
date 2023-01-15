@@ -1,10 +1,11 @@
 import json
 import os
-import lsp_implementation
 import std/[asyncdispatch, asyncfile, streams, uri]
 import asynctools/asyncproc
 
-include lsp/messages
+# unfortunately jsonschema objects as defined in lsp/messages are private, so
+# we have to use include and make this whole module one big file
+include lsp_implementation
 
 # milliseconds between iterations of the main while loop.
 const RESPONSE_MS = 100
@@ -44,7 +45,7 @@ proc main(ins: Stream | AsyncFile, outs: Stream | AsyncFile) {.async.}=
       let message = frame.parseJson()
       whenValid(message, RequestMessage):
         echo("recieved valid LSP request")
-        outs.write(processRequest(message))
+        await outs.write(`$` JsonNode(processRequest(message)))
     except UriParseError as e:
       log(LogLevel.warn, "Got exception parsing URI: ", e.msg)
       continue
